@@ -1,0 +1,18 @@
+#!/bin/bash
+
+(
+git --no-pager grep $@
+if [ $? == 128 ]
+then
+    exit 1
+fi
+
+for mod in `git submodule foreach --recursive | awk -F"'" '{ print $2;}'`
+do
+    (cd $mod
+    git --no-pager grep $@ |
+        while read match
+            do echo $mod/$match
+        done)
+done
+) | pager
