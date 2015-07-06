@@ -4,10 +4,6 @@
 # [alias]
 #     sgrep = "!f() { git-submodule-grep $@; }; f"
 
-if [ -z "$GIT_PREFIX" ]
-then
-    echo GIT_PREFIX not set, not run from within git
-fi
 
 for m in `git submodule foreach --recursive | awk -F"'" '{ print $2;}'`
 do
@@ -36,4 +32,4 @@ do
             do echo $m/$match
         done)
 done
-) | sed s+$GIT_PREFIX++ | pager
+) | sed s+^$GIT_PREFIX++ | pager
